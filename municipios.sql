@@ -115,3 +115,68 @@ JOIN VIVIENDAS ON MUNICIPIO.cod_municipio = VIVIENDAS.cod_municipio
 WHERE VIVIENDAS.metrosCuadrados > 300
 GROUP BY MUNICIPIO.nombre;
 --Número total de cabezas de familia empadronados en el municipio de Proaza.
+SELECT COUNT(*)
+FROM PERSONA
+JOIN VIVIENDAS ON PERSONA.cod_vivienda = VIVIENDAS.cod_vivienda
+JOIN MUNICIPIO ON VIVIENDAS.cod_municipio = MUNICIPIO.cod_municipio
+WHERE MUNICIPIO.nombre = 'Proaza';
+--Número total de municipios en cada provincia junto con el nombre de la misma.
+SELECT MUNICIPIO.provincia, COUNT(*)
+FROM MUNICIPIO
+GROUP BY MUNICIPIO.provincia;
+--Cantidad total de personas a cargo de cada cabeza de familia de las localidades de Asturias cuyo nombre empieza o termina por la letra ‘s’.
+
+SELECT PERSONA.Nombre , COUNT(*)
+FROM PERSONA
+JOIN VIVIENDAS ON PERSONA.cod_vivienda = VIVIENDAS.cod_vivienda
+JOIN MUNICIPIO ON VIVIENDAS.cod_municipio = MUNICIPIO.cod_municipio
+WHERE (MUNICIPIO.nombre LIKE 's%' OR MUNICIPIO.nombre LIKE '%s')
+GROUP BY PERSONA.Nombre;
+
+--Media de personas a cargo de un cabeza de familia en cada municipio de la provincia de Asturias.
+
+no la saque
+
+--Tamaño medio en metros cuadrados de las viviendas de cada municipio de la provincia de Asturias.
+SELECT MUNICIPIO.nombre, AVG(VIVIENDAS.metrosCuadrados) 
+FROM VIVIENDAS
+JOIN MUNICIPIO ON VIVIENDAS.cod_municipio = MUNICIPIO.cod_municipio
+GROUP BY MUNICIPIO.nombre;
+
+--Nombre, dirección y teléfono del cabeza de familia responsable de la persona con el D.N.I.  11.421.124.
+SELECT PERSONA.Nombre, VIVIENDAS.direccion, PERSONA.Telefono
+FROM PERSONA
+JOIN VIVIENDAS ON PERSONA.cod_vivienda = VIVIENDAS.cod_vivienda
+WHERE VIVIENDAS.DNI = '11.421.124';
+--Nombre y número de viviendas que posee cada cabeza de familia empadronado en un municipio de Asturias
+SELECT PERSONA.Nombre, COUNT(*) AS NumeroViuviendas
+FROM PERSONA
+JOIN VIVIENDAS ON PERSONA.cod_vivienda = VIVIENDAS.cod_vivienda
+JOIN MUNICIPIO ON VIVIENDAS.cod_municipio = MUNICIPIO.cod_municipio
+WHERE MUNICIPIO.provincia = 'Asturias'
+GROUP BY PERSONA.Nombre;
+--Nombre, dirección y teléfono de aquellos cabezas de familia que no poseen una vivienda en el municipio en el que están empadronados.
+
+No la saque 
+
+--Nombre, dirección y teléfono de las personas que están empadronadas o poseen una vivienda en el municipio de Colunga y cuyo nombre empieza por la letra ‘A’. La consulta incluirá una última columna en la que se mostrará el valor “empadronado” si la fila incluye datos de una persona empadronada o el valor “propietario” si la fila incluye datos de una persona que posee una vivienda en el municipio.
+
+No la saque
+
+--Dirección completa de la vivienda, junto con el nombre y teléfono de su propietario, de aquellas viviendas de Asturias cuya superficie sea mayor que la de todas las viviendas de Boal.
+SELECT  VIVIENDAS.direccion,  PERSONA.Nombre, PERSONA.Telefono
+FROM VIVIENDAS
+JOIN  PERSONA ON VIVIENDAS.DNI = PERSONA.DNI
+WHERE VIVIENDAS.metrosCuadrados > (
+        SELECT MAX(VIVIENDAS.metrosCuadrados)
+        FROM VIVIENDAS
+        JOIN MUNICIPIO ON VIVIENDAS.cod_municipio = MUNICIPIO.cod_municipio
+        WHERE MUNICIPIO.nombre = 'Boal'
+    );
+--Nombre, dirección y teléfono de las personas cuyo nombre empieza por la letra ‘B’, que están empadronadas en Morcín y poseen viviendas en dicho municipio.
+SELECT  PERSONA.Nombre, VIVIENDAS.direccion, PERSONA.Telefono
+FROM PERSONA
+JOIN  VIVIENDAS ON PERSONA.cod_vivienda = VIVIENDAS.cod_vivienda
+JOIN  MUNICIPIO ON VIVIENDAS.cod_municipio = MUNICIPIO.cod_municipio
+WHERE  PERSONA.Nombre LIKE 'B%' AND MUNICIPIO.nombre = 'Morcín';
+
